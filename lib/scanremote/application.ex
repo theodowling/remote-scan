@@ -8,8 +8,7 @@ defmodule Scanremote.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      # Starts a worker by calling: Scanremote.Worker.start_link(arg)
-      # {Scanremote.Worker, arg}
+      Scanremote.Server
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
