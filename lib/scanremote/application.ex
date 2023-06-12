@@ -8,7 +8,11 @@ defmodule Scanremote.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      Scanremote.Server
+      %{
+        id: Scanremote.Listener,
+        start: {Scanremote.Listener, :start_link, [5001, Scanremote]},
+        restart: :permanent
+      }
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

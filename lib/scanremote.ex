@@ -3,16 +3,10 @@ defmodule Scanremote do
   Documentation for `Scanremote`.
   """
 
-  @doc """
-  Hello world.
+  def call(%{path: "/"}),
+    do: %{code: 200, type: "text/plain", body: "OMG Y'ALL!!"}
 
-  ## Examples
-
-      iex> Scanremote.hello()
-      :world
-
-  """
-  def hello do
-    :world
-  end
+  # everything else is a 404 response
+  def call(_),
+    do: %{code: 404, body: "say what now?"}
 end
