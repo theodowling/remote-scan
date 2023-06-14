@@ -4,7 +4,7 @@ defmodule Scanremote do
   """
 
   def call(%{path: "/"}),
-    do: %{code: 200, type: "text/plain", body: "OMG Y'ALL!!"}
+    do: %{code: 200, type: "text/plain", body: "OMG Y'ALL!"}
 
   # everything else is a 404 response
   def call(_),

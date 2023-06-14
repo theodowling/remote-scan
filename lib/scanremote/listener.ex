@@ -24,7 +24,7 @@ defmodule Scanremote.Listener do
     # we punt to another process to avoid blocking the listener
     Task.async(Scanremote.Server, :serve, [socket, handler])
 
-    # tail recursion FTW!
+    # tail recursion
     loop(listener, handler)
   end
 end

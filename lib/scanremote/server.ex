@@ -3,6 +3,7 @@ defmodule Scanremote.Server do
 
   @messages %{
     200 => "OK",
+    400 => "Invalid Request",
     404 => "Not Found",
     500 => "Internal Error"
   }
@@ -19,31 +20,38 @@ defmodule Scanremote.Server do
   # read from the socket and return a tuple with the first line and a list of headers
   defp read(socket) do
     {:ok, line} = :gen_tcp.recv(socket, 0)
-    headers = read_headers(socket)
 
-    {line, headers}
+    if String.contains?(line, "HTTP") do
+      headers = read_headers(socket)
+      {:ok, {line, headers}}
+    else
+      {:error, "Invalid request"}
+    end
   end
 
   # parse out the path, verb and query string
   # return a map of that represents the request
-  defp parse({line, headers}) do
+  defp parse({:error, r}), do: {:error, r}
+
+  defp parse({:ok, {line, headers}}) do
     [verb, path, _version] = String.split(line)
 
     {path, query} = parse_uri(path)
 
-    %{
-      verb: verb,
-      path: path,
-      query: query,
-      headers: headers
-    }
+    {:ok,
+     %{
+       verb: verb,
+       path: path,
+       query: query,
+       headers: headers
+     }}
   end
 
   # reads the headers from socket, returns an array
   defp read_headers(socket, headers \\ []) do
     {:ok, line} = :gen_tcp.recv(socket, 0)
 
-    case Regex.run(~r/(\w+): (.*)/, line) do
+    case Regex.run(~r/^(\w+): (.*)\r\n$/, line) do
       [_line, key, value] -> [{key, value}] ++ read_headers(socket, headers)
       _ -> []
     end
@@ -58,14 +66,16 @@ defmodule Scanremote.Server do
   end
 
   # process the request by logging it and sending it to handler
-  defp process(request, handler) do
+  defp process({:ok, request}, handler) do
     Logger.info("#{request.verb} #{request.path}")
 
-    handler.call(request)
+    {:ok, handler.call(request)}
   end
 
+  defp process(error, _), do: error
+
   # write the response back to the socket
-  defp write(response, socket) do
+  defp write({:ok, response}, socket) do
     code = response[:code] || 500
     body = response[:body] || ""
     headers = format_headers(response[:headers])
@@ -80,6 +90,18 @@ defmodule Scanremote.Server do
     raw = preamble <> headers <> "\n" <> body
 
     :gen_tcp.send(socket, raw)
+  end
+
+  defp write({:error, _error}, socket) do
+    code = 400
+
+    preamble = """
+    HTTP/1.1 #{code} #{message(code)}
+    Date: #{:httpd_util.rfc1123_date()}
+    Content-Type: "text/plain"}
+    """
+
+    :gen_tcp.send(socket, preamble)
   end
 
   # formatting for headers
