@@ -1,4 +1,4 @@
-defmodule Scanremote.Server do
+defmodule RemoteScan.Server do
   require Logger
 
   @messages %{

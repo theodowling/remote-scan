@@ -1,4 +1,4 @@
-defmodule Scanremote.Listener do
+defmodule RemoteScan.Listener do
   require Logger
 
   @options [:binary, packet: :line, active: false, reuseaddr: true]
@@ -22,7 +22,7 @@ defmodule Scanremote.Listener do
 
     # start an async Task to reply to the client
     # we punt to another process to avoid blocking the listener
-    Task.async(Scanremote.Server, :serve, [socket, handler])
+    Task.async(RemoteScan.Server, :serve, [socket, handler])
 
     # tail recursion
     loop(listener, handler)

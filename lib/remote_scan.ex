@@ -1,6 +1,6 @@
-defmodule Scanremote do
+defmodule RemoteScan do
   @moduledoc """
-  Documentation for `Scanremote`.
+  Documentation for `RemoteScan`.
   """
 
   def call(%{path: "/scan/color", verb: "POST"}) do

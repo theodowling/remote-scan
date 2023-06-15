@@ -1,0 +1,9 @@
+{application,remote_scan,
+             [{applications,[kernel,stdlib,elixir,inets,logger]},
+              {description,"remote_scan"},
+              {modules,['Elixir.RemoteScan','Elixir.RemoteScan.Application',
+                        'Elixir.RemoteScan.Listener',
+                        'Elixir.RemoteScan.Server']},
+              {registered,[]},
+              {vsn,"0.1.2"},
+              {mod,{'Elixir.RemoteScan.Application',[]}}]}.

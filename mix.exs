@@ -1,10 +1,10 @@
-defmodule Scanremote.MixProject do
+defmodule RemoteScan.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :scanremote,
-      version: "0.1.0",
+      app: :remote_scan,
+      version: "0.1.2",
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
       deps: deps()
@@ -15,7 +15,7 @@ defmodule Scanremote.MixProject do
   def application do
     [
       extra_applications: [:inets, :logger],
-      mod: {Scanremote.Application, []}
+      mod: {RemoteScan.Application, []}
     ]
   end
 

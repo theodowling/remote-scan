@@ -1,21 +1,20 @@
-# Scanremote
+# RemoteScan
 
-**TODO: Add description**
+This project is a super simple standalone Elixir server that responds to http call - and triggers scan command on my rasperry-pi connected to a scanning device.
+
+The actual scannning is happening [http://www.sane-project.org/man/scanimage.1.html](via SANE)
+
+The scanned image is then put in a consume folder on [https://github.com/paperless-ngx/paperless-ngx](paperless-ngx) instance, to be auto classified and categorised.
+
+## Background
+
+I wanted to build this with no dependencies needed - so decided to implement http server from scratch - as a learning opportunity also.
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `scanremote` to your list of dependencies in `mix.exs`:
+Run locally using `mix run --no-halt`
 
-```elixir
-def deps do
-  [
-    {:scanremote, "~> 0.1.0"}
-  ]
-end
-```
+## Deployment
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/scanremote>.
+Build executable file using `mix release` which will then output the relevant options for you to run this as a daemon on the target device
 
